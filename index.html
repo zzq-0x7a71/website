@@ -3,37 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>zzq-0x7a71 | 个人小站</title>
+    <title>0x7a71 | 极客数字节点</title>
     <style>
-        body {
-            background-color: #111;
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
-            text-align: center;
-            padding-top: 15vh;
-            margin: 0;
+        :root {
+            --bg-color: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --text-main: #e0e0e0;
+            --text-sub: #888888;
         }
-        h1 { font-size: 2.5em; }
-        p { color: #888; }
-        .box {
-            border: 1px solid #333;
-            padding: 20px;
-            display: inline-block;
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        /* 动态背景光斑 */
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.6;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+        .glow-1 { background: var(--neon-blue); top: 10%; left: 20%; }
+        .glow-2 { background: var(--neon-purple); bottom: 10%; right: 20%; animation-delay: -5s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.2); }
+        }
+
+        /* 玻璃拟态卡片 */
+        .card {
+            position: relative;
+            z-index: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 头像/Logo */
+        .avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 2em;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: var(--text-sub);
+            margin-bottom: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            height: 20px;
+        }
+
+        /* 按钮 */
+        .btn {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 12px 24px;
             border-radius: 8px;
-            background: #1a1a1a;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .btn-purple {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+        .btn-purple:hover {
+            background: var(--neon-purple);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-purple);
+        }
+
+        /* IP 结果显示区 */
+        #ip-display {
+            margin-top: 15px;
+            font-size: 0.85em;
+            color: #ccc;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+            word-break: break-all;
+            border-left: 3px solid var(--neon-blue);
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .status {
+            font-size: 0.8em;
+            color: var(--text-sub);
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #00ff00;
         }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>Hello World!</h1>
-        <p>欢迎来到 zzq 的数字世界。</p>
-        <p>Status: <span style="color:#00ff00">Online</span></p>
+    <!-- 动态背景 -->
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <!-- 主卡片 -->
+    <div class="card">
+        <div class="avatar">&lt;/&gt;</div>
+        <h1>0x7a71</h1>
+        <div class="subtitle" id="typewriter"></div>
+        
+        <!-- 按钮区 -->
+        <button class="btn" onclick="getIP()">获取访客真实 IP</button>
+        
+        <!-- IP 显示区 -->
+        <div id="ip-display"></div>
+
+        <div class="status">
+            <span class="dot"></span> Node Online & Secure
+        </div>
     </div>
 
-    <!-- 咱们以后偷偷记录 IP 的请求就写在这里 -->
     <script>
-        console.log("Website loaded successfully.");
+        // 1. 打字机效果（十国语言格言滚动）
+        const text = "The best way to predict the future is to invent it.";
+        const quoteEl = document.getElementById('typewriter');
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                quoteEl.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+        typeWriter();
+
+        // 2. 调用你的 Cloudflare Worker 获取 IP
+        async function getIP() {
+            const display = document.getElementById('ip-display');
+            display.style.display = 'block';
+            display.innerHTML = '正在连接后端节点...';
+
+            // ⚠️⚠️⚠️ 这里一定要换成你刚才部署的 Worker 网址！
+            // 比如：https://zzq-api.你的账号.workers.dev/api/ip
+            const WORKER_URL = '你的Worker网址/api/ip'; 
+
+            try {
+                // 这里加上缓存穿透参数，防止浏览器缓存
+                const response = await fetch(WORKER_URL + '?t=' + Date.now());
+                const data = await response.json();
+                
+                display.innerHTML = `
+                    <strong>[目标锁定]</strong><br>
+                    <b>IP:</b> ${data.ip}<br>
+                    <b>设备:</b> ${data.device.substring(0, 50)}...
+                `;
+            } catch (error) {
+                display.innerHTML = `<span style="color:#ff5555">连接后端失败，请检查 Worker 网址或开启魔法。</span>`;
+            }
+        }
     </script>
 </body>
 </html>
