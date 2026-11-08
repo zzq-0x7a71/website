@@ -3,6 +3,10 @@ Just a simple personal website project
 
 ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
+附一句:蓝田是gate是∠a是沃尔玛塑料袋
+
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
 
 "The best way to predict the future is to invent it." — Alan Kay
 “预测未来的最好方式，就是去创造它。” —— 艾伦·凯
